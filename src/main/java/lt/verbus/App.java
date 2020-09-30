@@ -1,13 +1,15 @@
 package lt.verbus;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import lt.verbus.controller.Controller;
+import lt.verbus.exception.EntityNotFoundException;
+import lt.verbus.repository.*;
+
+import java.io.IOException;
+import java.sql.SQLException;
+
+public class App {
+    public static void main(String[] args) throws IOException, SQLException, EntityNotFoundException {
+        new Controller().launchApp();
+        ConnectionPool.closeConnections();
     }
 }
