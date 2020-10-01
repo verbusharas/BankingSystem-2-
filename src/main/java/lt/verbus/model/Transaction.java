@@ -3,6 +3,7 @@ package lt.verbus.model;
 import java.sql.Timestamp;
 
 public class Transaction {
+
     private long id;
     private BankAccount sender;
     private BankAccount receiver;

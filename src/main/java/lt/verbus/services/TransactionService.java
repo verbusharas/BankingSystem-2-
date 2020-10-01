@@ -4,9 +4,6 @@ import lt.verbus.exception.InsufficientFundsException;
 import lt.verbus.exception.EntityNotFoundException;
 import lt.verbus.model.BankAccount;
 import lt.verbus.model.Transaction;
-import lt.verbus.repository.BankAccountRepository;
-import lt.verbus.repository.ConnectionPool;
-import lt.verbus.repository.SqlDialect;
 import lt.verbus.repository.TransactionRepository;
 
 import java.io.IOException;

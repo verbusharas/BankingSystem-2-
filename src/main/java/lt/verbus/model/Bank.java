@@ -1,6 +1,7 @@
 package lt.verbus.model;
 
 public class Bank {
+
     private long id;
     private String bic;
     private String name;

@@ -1,6 +1,5 @@
 package lt.verbus.services;
 
-
 import lt.verbus.exception.InsufficientFundsException;
 import lt.verbus.exception.EntityNotFoundException;
 import lt.verbus.model.Bank;

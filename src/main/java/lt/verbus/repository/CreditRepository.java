@@ -1,12 +1,10 @@
 package lt.verbus.repository;
 
-import lt.verbus.exception.EntityNotFoundException;
 import lt.verbus.model.BankAccount;
 import lt.verbus.model.Credit;
 import lt.verbus.model.User;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;

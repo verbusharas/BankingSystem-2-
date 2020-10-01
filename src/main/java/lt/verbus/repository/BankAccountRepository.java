@@ -53,14 +53,14 @@ public class BankAccountRepository extends GenericRepository<BankAccount> {
 
     @Override
     public void update(BankAccount bankAccount) throws SQLException {
-        String query = String.format("UPDATE \"%s\" SET " +
-                        super.databaseTableName,
+        String query = String.format("UPDATE %s SET " +
                         "bank_id = %d, " +
                         "iban = \"%s\", " +
                         "card_type = \"%s\", " +
                         "user_id = %d, " +
                         "balance = %.2f " +
                         "WHERE id = %d",
+                super.databaseTableName,
                 bankAccount.getBank().getId(),
                 bankAccount.getIban(),
                 bankAccount.getCardType().toString(),

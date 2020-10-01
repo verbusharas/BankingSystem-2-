@@ -4,7 +4,9 @@ import lt.verbus.exception.EntityNotFoundException;
 import lt.verbus.model.Bank;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 
 public class BankRepository extends GenericRepository<Bank> {
 

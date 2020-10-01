@@ -3,6 +3,7 @@ package lt.verbus.model;
 import java.sql.Timestamp;
 
 public class Credit {
+
     private long id;
     private double amount;
     private Timestamp creditStartTime;
