@@ -50,13 +50,15 @@ public class CreditService {
     }
 
     public void updateCredits(Transaction transaction) throws SQLException, EntityNotFoundException {
-        BankAccount sender = transaction.getSender();
-        BankAccount receiver = transaction.getReceiver();
+        updateSenderCredits(transaction);
+        updateReceiverCredits(transaction);
+    }
 
+    private void updateSenderCredits(Transaction transaction) throws SQLException, EntityNotFoundException {
+        BankAccount sender = transaction.getSender();
         double transferedAmount = transaction.getAmount();
         Timestamp timeOfEvent = transaction.getTimestamp();
 
-        // SENDER CREDIT CHECK:
         if (sender != null) {
             double senderInitialBalance = sender.getBalance();
             double senderDifference = senderInitialBalance - transferedAmount;
@@ -69,29 +71,30 @@ public class CreditService {
                 update(senderCredit);
             }
         }
+    }
 
-        // RECEIVER CREDIT CHECK
+    private void updateReceiverCredits(Transaction transaction) throws SQLException, EntityNotFoundException {
+        BankAccount receiver = transaction.getReceiver();
+        double transferedAmount = transaction.getAmount();
         if (receiver != null) {
             double receiverInitialBalance = receiver.getBalance();
+
             if (receiverInitialBalance < 0) {
-                System.out.println("i am here in receiver check");
                 Credit receiverCredit = findByBankAccount(receiver);
                 double creditCost = 0;
                 double receiverBorrowedAmount = receiverCredit.getAmount();
                 LocalDateTime timeOfBorrow = receiverCredit.getCreditStartTime().toLocalDateTime();
+
                 if (timeOfBorrow.plusMonths(1).isBefore(LocalDateTime.now())) {
-                    System.out.println("i am here in moth has passed");
                     creditCost = receiverBorrowedAmount * CreditInterest.PERCENT / 100;
-                    System.out.println("credit cost: " + creditCost);
                 }
+
                 if (receiverBorrowedAmount + transferedAmount >= 0) {
-                    System.out.println("i am here, where after transfer credit should be returned ");
                     receiverCredit.setAmount(creditCost);
-                    System.out.println("receiver credit amount: " +receiverCredit.getAmount());
                 }
-                System.out.println(receiverCredit);
                 update(receiverCredit);
             }
         }
     }
+
 }
