@@ -20,7 +20,7 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
 
     public TransactionService(TransactionRepository transactionRepository) throws IOException, SQLException {
-        bankAccountRepository = new BankAccountRepository(ConnectionPool.getConnection(SqlDialect.MY_SQL));
+        bankAccountRepository = new BankAccountRepository(ConnectionPool.getInstance().getConnection());
         bankAccountService = new BankAccountService(bankAccountRepository);
         this.transactionRepository = transactionRepository;
     }

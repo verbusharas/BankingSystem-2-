@@ -44,11 +44,11 @@ public class Controller {
     private User currentUser;
 
     public Controller() throws IOException, SQLException {
-        bankRepository = new BankRepository(ConnectionPool.getConnection(SqlDialect.MY_SQL));
-        userRepository = new UserRepository(ConnectionPool.getConnection(SqlDialect.MY_SQL));
-        bankAccountRepository = new BankAccountRepository(ConnectionPool.getConnection(SqlDialect.MY_SQL));
-        transactionRepository = new TransactionRepository(ConnectionPool.getConnection(SqlDialect.MY_SQL));
-        creditRepository = new CreditRepository(ConnectionPool.getConnection(SqlDialect.MY_SQL));
+        bankRepository = new BankRepository(ConnectionPool.getInstance().getConnection());
+        userRepository = new UserRepository(ConnectionPool.getInstance().getConnection());
+        bankAccountRepository = new BankAccountRepository(ConnectionPool.getInstance().getConnection());
+        transactionRepository = new TransactionRepository(ConnectionPool.getInstance().getConnection());
+        creditRepository = new CreditRepository(ConnectionPool.getInstance().getConnection());
 
         bankService = new BankService(bankRepository);
         userService = new UserService(userRepository);

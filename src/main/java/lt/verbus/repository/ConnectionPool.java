@@ -7,11 +7,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class ConnectionPool {
+public final class ConnectionPool {
 
-    private static Connection connection = null;
+    private static Connection connection;
+    private static ConnectionPool instance;
 
-    public static Connection getConnection (SqlDialect sqlDialect) throws SQLException, IOException{
+    private ConnectionPool() throws SQLException, IOException {
         try (InputStream input = ConnectionPool.class.getClassLoader().getResourceAsStream("db.properties")) {
 
             Properties properties = new Properties();
@@ -21,15 +22,25 @@ public class ConnectionPool {
                 System.out.println("Sorry, unable to find db.properties");
             }
 
-            if (connection == null) {
-                connection = DriverManager.getConnection(
-                        properties.getProperty(sqlDialect.toString() + ".url"),
-                        properties.getProperty(sqlDialect.toString() + ".username"),
-                        properties.getProperty(sqlDialect.toString() + ".password")
-                );
-            }
-            return connection;
+            String sqlDialect = properties.getProperty("sqlDialect");
+
+            connection = DriverManager.getConnection(
+                    properties.getProperty(sqlDialect + ".url"),
+                    properties.getProperty(sqlDialect + ".username"),
+                    properties.getProperty(sqlDialect + ".password")
+            );
         }
+    }
+
+    public static ConnectionPool getInstance() throws IOException, SQLException {
+        if (instance == null) {
+            instance = new ConnectionPool();
+        }
+        return instance;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     public static void closeConnections() throws SQLException {

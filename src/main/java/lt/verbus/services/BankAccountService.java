@@ -26,7 +26,7 @@ public class BankAccountService {
 
     public BankAccountService(BankAccountRepository bankAccountRepository) throws IOException, SQLException {
         this.bankAccountRepository = bankAccountRepository;
-        creditRepository = new CreditRepository(ConnectionPool.getConnection(SqlDialect.MY_SQL));
+        creditRepository = new CreditRepository(ConnectionPool.getInstance().getConnection());
         creditService = new CreditService(creditRepository);
     }
 

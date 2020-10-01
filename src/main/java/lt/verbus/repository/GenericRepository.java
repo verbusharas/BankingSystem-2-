@@ -17,7 +17,7 @@ public abstract class GenericRepository<T> {
         this.statement = connection.createStatement();
     }
 
-    protected List<T> findAll() throws SQLException {
+    public List<T> findAll() throws SQLException {
         String query = String.format("SELECT * FROM %s", databaseTableName);
         ResultSet table = statement.executeQuery(query);
         return convertTableToList(table);
@@ -30,7 +30,7 @@ public abstract class GenericRepository<T> {
         return convertTableToObject(table);
     }
 
-    protected T findById(long id) throws SQLException {
+    public T findById(long id) throws SQLException {
         String query = String.format("SELECT * FROM %s WHERE id = %d", databaseTableName, id);
         ResultSet table = statement.executeQuery(query);
         table.next();
@@ -41,7 +41,7 @@ public abstract class GenericRepository<T> {
 
     abstract void update(T t) throws SQLException;
 
-    protected void delete(Long id) throws SQLException {
+    public void delete(Long id) throws SQLException {
         String query = String.format("DELETE FROM %s WHERE id = %d", databaseTableName, id);
         statement.executeUpdate(query);
     }
