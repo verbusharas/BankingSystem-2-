@@ -40,9 +40,10 @@ public class BankAccountRepository extends GenericRepository<BankAccount> {
 
     @Override
     public BankAccount save(BankAccount bankAccount) throws SQLException, EntityNotFoundException {
-        String query = String.format("INSERT INTO bank_account " +
+        String query = String.format("INSERT INTO \"%s\" " +
                         "(bank_id, iban, card_type, user_id, balance) " +
                         "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
+                super.databaseTableName,
                 bankAccount.getBank().getId(),
                 bankAccount.getIban(),
                 bankAccount.getCardType().toString(),
@@ -54,7 +55,8 @@ public class BankAccountRepository extends GenericRepository<BankAccount> {
 
     @Override
     public void update(BankAccount bankAccount) throws SQLException {
-        String query = String.format("UPDATE bank_account SET " +
+        String query = String.format("UPDATE \"%s\" SET " +
+                        super.databaseTableName,
                         "bank_id = %d, " +
                         "iban = \"%s\", " +
                         "card_type = \"%s\", " +
@@ -80,12 +82,12 @@ public class BankAccountRepository extends GenericRepository<BankAccount> {
         Double amount = transaction.getAmount();
         connection.setAutoCommit(false);
         try {
-            String queryForSender = String.format("UPDATE bank_account " +
-                            "SET balance = balance - %.2f WHERE id = %d",
+            String queryForSender = String.format("UPDATE " +  super.databaseTableName +
+                            " SET balance = balance - %.2f WHERE id = %d",
                     amount, sender.getId()
             );
-            String queryForReceiver = String.format("UPDATE bank_account " +
-                            "SET balance = balance + %.2f WHERE id = %d",
+            String queryForReceiver = String.format("UPDATE " +  super.databaseTableName +
+                            " SET balance = balance + %.2f WHERE id = %d",
                     amount, receiver.getId()
             );
             statement.executeUpdate(queryForSender);
