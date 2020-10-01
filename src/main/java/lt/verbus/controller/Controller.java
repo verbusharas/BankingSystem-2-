@@ -133,7 +133,7 @@ public class Controller {
                     stayInMenu = false;
                     break;
                 case "1":
-                    ListPrinter.printNumeratedListToConsole(bankAccountRepository.findAllBelongingTo(currentUser));
+                    ListPrinter.printNumeratedListToConsole(bankAccountRepository.findAllBelongingToUser(currentUser));
                     ListPrinter.printNumeratedListToConsole(creditService.findAllByDebtor(currentUser));
                     break;
                 case "2":
@@ -163,13 +163,13 @@ public class Controller {
 
     private void switchToTransactionListMenu() throws SQLException {
         BankAccount selectedBankAccount = askToChooseFromList(
-                bankAccountRepository.findAllBelongingTo(currentUser), "bank account");
+                bankAccountRepository.findAllBelongingToUser(currentUser), "bank account");
         ListPrinter.printNumeratedListToConsole(transactionService.findAllByBankAccount(selectedBankAccount));
     }
 
     private void switchToExportTransactionsMenu() throws SQLException {
         BankAccount selectedBankAccount = askToChooseFromList(
-                bankAccountRepository.findAllBelongingTo(currentUser), "bank account");
+                bankAccountRepository.findAllBelongingToUser(currentUser), "bank account");
         UserSpecifyFileNameMenu.display();
         ListPrinter.printListToFile(transactionService
                 .findAllByBankAccount(selectedBankAccount), consoleInput.nextLine());
@@ -182,7 +182,7 @@ public class Controller {
         double amount = Double.parseDouble(consoleInput.nextLine());
         //TODO: validate for numeric input
         BankAccount selectedBankAccount = askToChooseFromList(
-                bankAccountRepository.findAllBelongingTo(currentUser), "bank account");
+                bankAccountRepository.findAllBelongingToUser(currentUser), "bank account");
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
         transaction.setSender(null);
@@ -196,7 +196,7 @@ public class Controller {
         double amount = Double.parseDouble(consoleInput.nextLine());
         //TODO: validate for numeric input
         BankAccount selectedBankAccount = askToChooseFromList(
-                bankAccountRepository.findAllBelongingTo(currentUser), "bank account");
+                bankAccountRepository.findAllBelongingToUser(currentUser), "bank account");
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
         transaction.setSender(selectedBankAccount);
@@ -214,7 +214,7 @@ public class Controller {
         double amount = Double.parseDouble(consoleInput.nextLine());
         //TODO: validate for numeric input
         BankAccount selectedSenderBankAccount = askToChooseFromList(
-                bankAccountRepository.findAllBelongingTo(currentUser), "bank account");
+                bankAccountRepository.findAllBelongingToUser(currentUser), "bank account");
         User receivingUser = null;
         UserTransferMenu.displayReceiverRequest();
         ListPrinter.printUsernameCheatList(userService.findAll());
@@ -227,7 +227,7 @@ public class Controller {
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
         transaction.setSender(selectedSenderBankAccount);
-        transaction.setReceiver(bankAccountService.findAllBelongingTo(receivingUser).get(0));
+        transaction.setReceiver(bankAccountService.findAllBelongingToUser(receivingUser).get(0));
         try {
             transactionService.execute(transaction);
         } catch (InsufficientFundsException ex) {

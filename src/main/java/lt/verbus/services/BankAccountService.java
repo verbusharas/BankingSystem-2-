@@ -3,9 +3,11 @@ package lt.verbus.services;
 
 import lt.verbus.exception.InsufficientFundsException;
 import lt.verbus.exception.EntityNotFoundException;
+import lt.verbus.model.Bank;
 import lt.verbus.model.BankAccount;
 import lt.verbus.model.CardType;
 import lt.verbus.model.Transaction;
+import lt.verbus.model.User;
 import lt.verbus.repository.BankAccountRepository;
 import lt.verbus.repository.ConnectionPool;
 import lt.verbus.repository.CreditRepository;
@@ -36,8 +38,12 @@ public class BankAccountService {
         return bankAccountRepository.findByIban(iban);
     }
 
-    public List<BankAccount> findAllBelongingTo(Object object) throws SQLException {
-        return bankAccountRepository.findAllBelongingTo(object);
+    public List<BankAccount> findAllBelongingToUser(User user) throws SQLException {
+        return bankAccountRepository.findAllBelongingToUser(user);
+    }
+
+    public List<BankAccount> findAllBelongingToBank(Bank bank) throws SQLException {
+        return bankAccountRepository.findAllBelongingToBank(bank);
     }
 
     public BankAccount findById(Long id) throws SQLException {

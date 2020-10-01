@@ -81,7 +81,7 @@ public class CreditService {
                 LocalDateTime timeOfBorrow = receiverCredit.getCreditStartTime().toLocalDateTime();
                 if (timeOfBorrow.plusMonths(1).isBefore(LocalDateTime.now())) {
                     System.out.println("i am here in moth has passed");
-                    creditCost = receiverBorrowedAmount * CreditInterest.percent / 100;
+                    creditCost = receiverBorrowedAmount * CreditInterest.PERCENT / 100;
                     System.out.println("credit cost: " + creditCost);
                 }
                 if (receiverBorrowedAmount + transferedAmount >= 0) {

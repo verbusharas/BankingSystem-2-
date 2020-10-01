@@ -8,6 +8,8 @@ import java.util.List;
 
 public class BankAccountRepository extends GenericRepository<BankAccount> {
 
+    private final String SELECT_ALL_BELONGING_TO = ("SELECT * FROM bank_account WHERE ");
+
     public BankAccountRepository(Connection connection) throws SQLException {
         super(connection, "bank_account");
     }
@@ -20,13 +22,14 @@ public class BankAccountRepository extends GenericRepository<BankAccount> {
         return super.findByUniqueCode("iban", iban);
     }
 
-    public List<BankAccount> findAllBelongingTo(Object object) throws SQLException {
-        String query = ("SELECT * FROM bank_account WHERE ");
-        if (object instanceof User) {
-            query += "user_id = " + ((User) object).getId();
-        } else if (object instanceof Bank) {
-            query += "bank_id = " + ((Bank) object).getId();
-        } else return null;
+    public List<BankAccount> findAllBelongingToUser(User user) throws SQLException {
+        String query = SELECT_ALL_BELONGING_TO + "user_id = " + user.getId();
+        ResultSet table = statement.executeQuery(query);
+        return convertTableToList(table);
+    }
+
+    public List<BankAccount> findAllBelongingToBank(Bank bank) throws SQLException {
+        String query = SELECT_ALL_BELONGING_TO + "bank_id = " + bank.getId();
         ResultSet table = statement.executeQuery(query);
         return convertTableToList(table);
     }
