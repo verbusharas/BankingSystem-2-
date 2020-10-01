@@ -16,10 +16,6 @@ public class CreditRepository extends GenericRepository<Credit> {
         super(connection, "credit");
     }
 
-    public List<Credit> findAll() throws SQLException {
-        return super.findAll();
-    }
-
     public List<Credit> findAllByDebtor(User user) throws SQLException, EntityNotFoundException {
         String query = String.format("SELECT * FROM credit c " +
                         "JOIN bank_account ba ON c.bank_account_id = ba.id " +
@@ -37,10 +33,6 @@ public class CreditRepository extends GenericRepository<Credit> {
         ResultSet table = statement.executeQuery(query);
         table.next();
         return convertTableToObject(table);
-    }
-
-    public Credit findById(long id) throws SQLException {
-        return super.findById(id);
     }
 
     @Override
@@ -67,10 +59,6 @@ public class CreditRepository extends GenericRepository<Credit> {
                 credit.getAmount(),
                 credit.getId());
         statement.executeUpdate(query);
-    }
-
-    public void delete(Long id) throws SQLException {
-        super.delete(id);
     }
 
     @Override

@@ -12,16 +12,8 @@ public class UserRepository extends GenericRepository<User> {
         super(connection, "user");
     }
 
-    public List<User> findAll() throws SQLException {
-        return super.findAll();
-    }
-
     public User findByUsername(String username) throws SQLException, EntityNotFoundException {
         return super.findByUniqueCode("username", username);
-    }
-
-    public User findById(long id) throws SQLException {
-        return super.findById(id);
     }
 
     @Override
@@ -42,10 +34,6 @@ public class UserRepository extends GenericRepository<User> {
                 user.getUsername(), user.getFullName(), user.getPhoneNumber(),
                 user.getId());
         statement.executeUpdate(query);
-    }
-
-    public void delete(Long id) throws SQLException {
-        super.delete(id);
     }
 
     @Override

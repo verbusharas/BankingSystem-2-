@@ -14,10 +14,6 @@ public class TransactionRepository extends GenericRepository<Transaction>{
         super(connection, "transaction");
     }
 
-    public List<Transaction> findAll() throws SQLException {
-        return super.findAll();
-    }
-
     public List<Transaction> findAllByBankAccount(BankAccount bankAccount) throws SQLException {
         String query = String.format("SELECT * FROM transaction " +
                         "WHERE sender_bank_account_id = %d " +
@@ -29,10 +25,6 @@ public class TransactionRepository extends GenericRepository<Transaction>{
 
     public Transaction findByTimestamp(String timestampString) throws SQLException, EntityNotFoundException {
         return super.findByUniqueCode("timestamp", timestampString);
-    }
-
-    public Transaction findById(Long id) throws SQLException {
-        return super.findById(id);
     }
 
     @Override
@@ -68,10 +60,6 @@ public class TransactionRepository extends GenericRepository<Transaction>{
         statement.execute(query);
         // TODO: return object with sql generated id according to other repository examples
         return null;
-    }
-
-    public void delete(Long id) throws SQLException {
-        super.delete(id);
     }
 
     @Override

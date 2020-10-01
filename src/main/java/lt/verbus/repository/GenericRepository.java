@@ -9,7 +9,7 @@ import java.util.List;
 public abstract class GenericRepository<T> {
     protected final Connection connection;
     protected final Statement statement;
-    private final String databaseTableName;
+    protected final String databaseTableName;
 
     protected GenericRepository(Connection connection, String databaseTableName) throws SQLException {
         this.databaseTableName = databaseTableName;

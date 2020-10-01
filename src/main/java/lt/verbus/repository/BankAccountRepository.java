@@ -14,10 +14,6 @@ public class BankAccountRepository extends GenericRepository<BankAccount> {
         super(connection, "bank_account");
     }
 
-    public List<BankAccount> findAll() throws SQLException {
-        return super.findAll();
-    }
-
     public BankAccount findByIban(String iban) throws SQLException, EntityNotFoundException {
         return super.findByUniqueCode("iban", iban);
     }
@@ -32,10 +28,6 @@ public class BankAccountRepository extends GenericRepository<BankAccount> {
         String query = SELECT_ALL_BELONGING_TO + "bank_id = " + bank.getId();
         ResultSet table = statement.executeQuery(query);
         return convertTableToList(table);
-    }
-
-    public BankAccount findById(Long id) throws SQLException {
-        return super.findById(id);
     }
 
     @Override
@@ -70,10 +62,6 @@ public class BankAccountRepository extends GenericRepository<BankAccount> {
                 bankAccount.getBalance(),
                 bankAccount.getId());
         statement.executeUpdate(query);
-    }
-
-    public void delete(Long id) throws SQLException {
-        super.delete(id);
     }
 
     public boolean updateByTransaction(Transaction transaction) throws SQLException {

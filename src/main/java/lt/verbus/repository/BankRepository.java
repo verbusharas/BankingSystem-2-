@@ -12,16 +12,8 @@ public class BankRepository extends GenericRepository<Bank> {
         super(connection, "bank");
     }
 
-    public List<Bank> findAll() throws SQLException {
-        return super.findAll();
-    }
-
     public Bank findByBic(String bic) throws SQLException, EntityNotFoundException {
         return super.findByUniqueCode("bic", bic);
-    }
-
-    public Bank findById(long id) throws SQLException {
-        return super.findById(id);
     }
 
     @Override
@@ -40,10 +32,6 @@ public class BankRepository extends GenericRepository<Bank> {
                         "name = \"%s\", bic = \"%s\" WHERE id = %d",
                 bank.getName(), bank.getBic(), bank.getId());
         statement.executeUpdate(query);
-    }
-
-    public void delete(Long id) throws SQLException {
-        super.delete(id);
     }
 
     @Override
