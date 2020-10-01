@@ -25,10 +25,14 @@ public class ListPrinter {
             filename += ".txt";
         }
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filename))) {
-            for (T t : list) {
-                writer.write(t.toString());
-                writer.newLine();
-            }
+            list.forEach(t -> {
+                try {
+                    writer.write(t.toString());
+                    writer.newLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
