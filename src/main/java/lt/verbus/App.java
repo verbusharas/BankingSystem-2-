@@ -2,7 +2,7 @@ package lt.verbus;
 
 import lt.verbus.controller.Controller;
 import lt.verbus.exception.EntityNotFoundException;
-import lt.verbus.repository.*;
+import lt.verbus.repository.ConnectionPool;
 
 import java.io.IOException;
 import java.sql.SQLException;
