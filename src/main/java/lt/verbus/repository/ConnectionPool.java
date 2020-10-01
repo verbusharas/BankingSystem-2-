@@ -12,7 +12,7 @@ public final class ConnectionPool {
     private static Connection connection;
     private static ConnectionPool instance;
 
-    private ConnectionPool() throws SQLException, IOException {
+    private ConnectionPool() {
         try (InputStream input = ConnectionPool.class.getClassLoader().getResourceAsStream("db.properties")) {
 
             Properties properties = new Properties();
@@ -29,10 +29,12 @@ public final class ConnectionPool {
                     properties.getProperty(sqlDialect + ".username"),
                     properties.getProperty(sqlDialect + ".password")
             );
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static ConnectionPool getInstance() throws IOException, SQLException {
+    public static ConnectionPool getInstance() {
         if (instance == null) {
             instance = new ConnectionPool();
         }

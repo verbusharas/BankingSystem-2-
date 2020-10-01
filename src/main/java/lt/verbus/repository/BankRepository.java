@@ -3,21 +3,21 @@ package lt.verbus.repository;
 import lt.verbus.exception.EntityNotFoundException;
 import lt.verbus.model.Bank;
 
+import java.io.IOException;
 import java.sql.*;
-import java.util.List;
 
 public class BankRepository extends GenericRepository<Bank> {
 
-    public BankRepository(Connection connection) throws SQLException {
-        super(connection, "bank");
+    public BankRepository() throws SQLException, IOException {
+        super("bank");
     }
 
-    public Bank findByBic(String bic) throws SQLException, EntityNotFoundException {
+    public Bank findByBic(String bic) throws SQLException, EntityNotFoundException, IOException {
         return super.findByUniqueCode("bic", bic);
     }
 
     @Override
-    public Bank save(Bank bank) throws SQLException, EntityNotFoundException {
+    public Bank save(Bank bank) throws SQLException, EntityNotFoundException, IOException {
         String query = String.format("INSERT INTO bank " +
                         "(name, bic) " +
                         "VALUES (\"%s\", \"%s\")",

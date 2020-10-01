@@ -4,17 +4,18 @@ import lt.verbus.exception.EntityNotFoundException;
 import lt.verbus.model.BankAccount;
 import lt.verbus.model.Transaction;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.List;
 
 public class TransactionRepository extends GenericRepository<Transaction>{
 
 
-    public TransactionRepository(Connection connection) throws SQLException {
-        super(connection, "transaction");
+    public TransactionRepository() throws SQLException, IOException {
+        super("transaction");
     }
 
-    public List<Transaction> findAllByBankAccount(BankAccount bankAccount) throws SQLException {
+    public List<Transaction> findAllByBankAccount(BankAccount bankAccount) throws SQLException, IOException {
         String query = String.format("SELECT * FROM transaction " +
                         "WHERE sender_bank_account_id = %d " +
                         "OR receiver_bank_account_id = %d",
@@ -23,7 +24,7 @@ public class TransactionRepository extends GenericRepository<Transaction>{
         return convertTableToList(table);
     }
 
-    public Transaction findByTimestamp(String timestampString) throws SQLException, EntityNotFoundException {
+    public Transaction findByTimestamp(String timestampString) throws SQLException, EntityNotFoundException, IOException {
         return super.findByUniqueCode("timestamp", timestampString);
     }
 
@@ -79,13 +80,13 @@ public class TransactionRepository extends GenericRepository<Transaction>{
     }
 
     @Override
-    public Transaction convertTableToObject(ResultSet table) throws SQLException {
+    public Transaction convertTableToObject(ResultSet table) throws SQLException, IOException {
         Transaction transaction = new Transaction();
         transaction.setId(table.getInt("id"));
         transaction.setTimestamp(table.getTimestamp("timestamp"));
         transaction.setAmount(table.getDouble("amount"));
 
-        BankAccountRepository bankAccountRepository = new BankAccountRepository(connection);
+        BankAccountRepository bankAccountRepository = new BankAccountRepository();
 
         long senderAccountId = table.getInt("sender_bank_account_id");
         long receiverAccountId = table.getInt("receiver_bank_account_id");

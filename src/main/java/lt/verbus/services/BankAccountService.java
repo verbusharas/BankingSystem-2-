@@ -9,9 +9,6 @@ import lt.verbus.model.CardType;
 import lt.verbus.model.Transaction;
 import lt.verbus.model.User;
 import lt.verbus.repository.BankAccountRepository;
-import lt.verbus.repository.ConnectionPool;
-import lt.verbus.repository.CreditRepository;
-import lt.verbus.repository.SqlDialect;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -21,36 +18,34 @@ import java.util.Random;
 public class BankAccountService {
 
     private final BankAccountRepository bankAccountRepository;
-    private CreditRepository creditRepository;
     private CreditService creditService;
 
-    public BankAccountService(BankAccountRepository bankAccountRepository) throws IOException, SQLException {
-        this.bankAccountRepository = bankAccountRepository;
-        creditRepository = new CreditRepository(ConnectionPool.getInstance().getConnection());
-        creditService = new CreditService(creditRepository);
+    public BankAccountService() throws IOException, SQLException {
+        bankAccountRepository = new BankAccountRepository();
+        creditService = new CreditService();
     }
 
-    public List<BankAccount> findAll() throws SQLException {
+    public List<BankAccount> findAll() throws SQLException, IOException {
         return bankAccountRepository.findAll();
     }
 
-    public BankAccount findByIban(String iban) throws SQLException, EntityNotFoundException {
+    public BankAccount findByIban(String iban) throws SQLException, EntityNotFoundException, IOException {
         return bankAccountRepository.findByIban(iban);
     }
 
-    public List<BankAccount> findAllBelongingToUser(User user) throws SQLException {
+    public List<BankAccount> findAllBelongingToUser(User user) throws SQLException, IOException {
         return bankAccountRepository.findAllBelongingToUser(user);
     }
 
-    public List<BankAccount> findAllBelongingToBank(Bank bank) throws SQLException {
+    public List<BankAccount> findAllBelongingToBank(Bank bank) throws SQLException, IOException {
         return bankAccountRepository.findAllBelongingToBank(bank);
     }
 
-    public BankAccount findById(Long id) throws SQLException {
+    public BankAccount findById(Long id) throws SQLException, IOException {
         return bankAccountRepository.findById(id);
     }
 
-    public BankAccount save(BankAccount bankAccount) throws SQLException, EntityNotFoundException {
+    public BankAccount save(BankAccount bankAccount) throws SQLException, EntityNotFoundException, IOException {
         return bankAccountRepository.save(bankAccount);
     }
 
@@ -74,7 +69,7 @@ public class BankAccountService {
         return iban;
     }
 
-    public boolean transferFunds(Transaction transaction) throws SQLException, InsufficientFundsException, EntityNotFoundException {
+    public boolean transferFunds(Transaction transaction) throws SQLException, InsufficientFundsException, EntityNotFoundException, IOException {
         validateIfSufficientFunds(transaction);
         if (bankAccountRepository.updateByTransaction(transaction)) {
             creditService.updateCredits(transaction);
@@ -82,7 +77,7 @@ public class BankAccountService {
         } else return false;
     }
 
-    public void addFunds(Transaction transaction) throws SQLException, EntityNotFoundException {
+    public void addFunds(Transaction transaction) throws SQLException, EntityNotFoundException, IOException {
         double amount = transaction.getAmount();
         BankAccount targetBankAccount = transaction.getReceiver();
         creditService.updateCredits(transaction);
@@ -90,7 +85,7 @@ public class BankAccountService {
         bankAccountRepository.update(targetBankAccount);
     }
 
-    public void subtractFunds(Transaction transaction) throws InsufficientFundsException, SQLException, EntityNotFoundException {
+    public void subtractFunds(Transaction transaction) throws InsufficientFundsException, SQLException, EntityNotFoundException, IOException {
         validateIfSufficientFunds(transaction);
         double amount = transaction.getAmount();
         BankAccount sourceBankAccount = transaction.getSender();

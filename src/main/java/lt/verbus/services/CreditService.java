@@ -8,6 +8,7 @@ import lt.verbus.model.Transaction;
 import lt.verbus.model.User;
 import lt.verbus.repository.CreditRepository;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -17,27 +18,27 @@ public class CreditService {
 
     private final CreditRepository creditRepository;
 
-    public CreditService(CreditRepository creditRepository) {
-        this.creditRepository = creditRepository;
+    public CreditService() throws IOException, SQLException {
+        creditRepository = new CreditRepository();
     }
 
-    public List<Credit> findAll() throws SQLException {
+    public List<Credit> findAll() throws SQLException, IOException {
         return creditRepository.findAll();
     }
 
-    public Credit findByBankAccount(BankAccount bankAccount) throws SQLException, EntityNotFoundException {
+    public Credit findByBankAccount(BankAccount bankAccount) throws SQLException, IOException {
         return creditRepository.findByBankAccount(bankAccount);
     }
 
-    public List<Credit> findAllByDebtor(User user) throws SQLException, EntityNotFoundException {
+    public List<Credit> findAllByDebtor(User user) throws SQLException, IOException {
         return creditRepository.findAllByDebtor(user);
     }
 
-    public Credit findById(long id) throws SQLException {
+    public Credit findById(long id) throws SQLException, IOException {
         return creditRepository.findById(id);
     }
 
-    public Credit save(Credit credit) throws SQLException, EntityNotFoundException {
+    public Credit save(Credit credit) throws SQLException, IOException {
         return creditRepository.save(credit);
     }
 
@@ -49,12 +50,12 @@ public class CreditService {
         creditRepository.delete(id);
     }
 
-    public void updateCredits(Transaction transaction) throws SQLException, EntityNotFoundException {
+    public void updateCredits(Transaction transaction) throws SQLException, EntityNotFoundException, IOException {
         updateSenderCredits(transaction);
         updateReceiverCredits(transaction);
     }
 
-    private void updateSenderCredits(Transaction transaction) throws SQLException, EntityNotFoundException {
+    private void updateSenderCredits(Transaction transaction) throws SQLException, IOException {
         BankAccount sender = transaction.getSender();
         double transferedAmount = transaction.getAmount();
         Timestamp timeOfEvent = transaction.getTimestamp();
@@ -73,7 +74,7 @@ public class CreditService {
         }
     }
 
-    private void updateReceiverCredits(Transaction transaction) throws SQLException, EntityNotFoundException {
+    private void updateReceiverCredits(Transaction transaction) throws SQLException, IOException {
         BankAccount receiver = transaction.getReceiver();
         double transferedAmount = transaction.getAmount();
         if (receiver != null) {

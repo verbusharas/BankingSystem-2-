@@ -5,6 +5,7 @@ import lt.verbus.model.BankAccount;
 import lt.verbus.model.Credit;
 import lt.verbus.model.User;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,11 +13,11 @@ import java.util.List;
 
 public class CreditRepository extends GenericRepository<Credit> {
 
-    public CreditRepository(Connection connection) throws SQLException {
-        super(connection, "credit");
+    public CreditRepository() throws SQLException {
+        super("credit");
     }
 
-    public List<Credit> findAllByDebtor(User user) throws SQLException, EntityNotFoundException {
+    public List<Credit> findAllByDebtor(User user) throws SQLException, IOException {
         String query = String.format("SELECT * FROM credit c " +
                         "JOIN bank_account ba ON c.bank_account_id = ba.id " +
                         "JOIN user u ON ba.user_id = u.id " +
@@ -26,7 +27,7 @@ public class CreditRepository extends GenericRepository<Credit> {
         return convertTableToList(table);
     }
 
-    public Credit findByBankAccount(BankAccount bankAccount) throws SQLException, EntityNotFoundException {
+    public Credit findByBankAccount(BankAccount bankAccount) throws SQLException, IOException {
         String query = String.format("SELECT * FROM credit " +
                         "WHERE bank_account_id = %d",
                 bankAccount.getId());
@@ -36,7 +37,7 @@ public class CreditRepository extends GenericRepository<Credit> {
     }
 
     @Override
-    public Credit save(Credit credit) throws SQLException, EntityNotFoundException {
+    public Credit save(Credit credit) throws SQLException, IOException {
         String query = String.format("INSERT INTO credit " +
                         "(credit_initialize_timestamp, bank_account_id, amount) " +
                         "VALUES (\"%s\", %d, %.2f)",
@@ -62,13 +63,13 @@ public class CreditRepository extends GenericRepository<Credit> {
     }
 
     @Override
-    public Credit convertTableToObject(ResultSet table) throws SQLException {
+    public Credit convertTableToObject(ResultSet table) throws SQLException, IOException {
         Credit credit = new Credit();
         credit.setId(table.getInt("id"));
         credit.setAmount(table.getDouble("amount"));
         credit.setCreditStartTime(table.getTimestamp("credit_initialize_timestamp"));
 
-        BankAccountRepository bankAccountRepository = new BankAccountRepository(connection);
+        BankAccountRepository bankAccountRepository = new BankAccountRepository();
         credit.setCreditedBankAccount(bankAccountRepository
                 .findById(table.getInt("bank_account_id")));
 

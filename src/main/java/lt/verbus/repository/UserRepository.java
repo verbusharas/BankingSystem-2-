@@ -3,21 +3,22 @@ package lt.verbus.repository;
 import lt.verbus.exception.EntityNotFoundException;
 import lt.verbus.model.User;
 
-import java.sql.*;
-import java.util.List;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserRepository extends GenericRepository<User> {
 
-    public UserRepository(Connection connection) throws SQLException {
-        super(connection, "user");
+    public UserRepository() throws SQLException {
+        super("user");
     }
 
-    public User findByUsername(String username) throws SQLException, EntityNotFoundException {
+    public User findByUsername(String username) throws SQLException, EntityNotFoundException, IOException {
         return super.findByUniqueCode("username", username);
     }
 
     @Override
-    public User save(User user) throws SQLException, EntityNotFoundException {
+    public User save(User user) throws SQLException, EntityNotFoundException, IOException {
         String query = String.format("INSERT INTO user " +
                         "(username, full_name, phone_number) " +
                         "VALUES (\"%s\", \"%s\", \"%s\")",
