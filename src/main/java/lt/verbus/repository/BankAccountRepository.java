@@ -14,7 +14,7 @@ import java.util.List;
 
 public class BankAccountRepository extends GenericRepository<BankAccount> {
 
-    private final String SELECT_ALL_BELONGING_TO = ("SELECT * FROM bank_account WHERE ");
+    private final String SELECT_ALL_BELONGING_TO = ("SELECT * FROM " + super.databaseTableName + " WHERE ");
 
     public BankAccountRepository(Connection connection) throws SQLException {
         super(connection, "bank_account");
