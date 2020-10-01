@@ -1,9 +1,15 @@
 package lt.verbus.repository;
 
 import lt.verbus.exception.EntityNotFoundException;
-import lt.verbus.model.*;
+import lt.verbus.model.Bank;
+import lt.verbus.model.BankAccount;
+import lt.verbus.model.CardType;
+import lt.verbus.model.Transaction;
+import lt.verbus.model.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class BankAccountRepository extends GenericRepository<BankAccount> {
