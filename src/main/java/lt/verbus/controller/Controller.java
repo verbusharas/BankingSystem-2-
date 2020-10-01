@@ -2,9 +2,23 @@ package lt.verbus.controller;
 
 import lt.verbus.exception.InsufficientFundsException;
 import lt.verbus.exception.EntityNotFoundException;
-import lt.verbus.model.*;
-import lt.verbus.repository.*;
-import lt.verbus.services.*;
+import lt.verbus.model.Bank;
+import lt.verbus.model.BankAccount;
+import lt.verbus.model.CardType;
+import lt.verbus.model.Transaction;
+import lt.verbus.model.User;
+import lt.verbus.repository.BankAccountRepository;
+import lt.verbus.repository.BankRepository;
+import lt.verbus.repository.ConnectionPool;
+import lt.verbus.repository.CreditRepository;
+import lt.verbus.repository.SqlDialect;
+import lt.verbus.repository.TransactionRepository;
+import lt.verbus.repository.UserRepository;
+import lt.verbus.services.BankAccountService;
+import lt.verbus.services.BankService;
+import lt.verbus.services.CreditService;
+import lt.verbus.services.TransactionService;
+import lt.verbus.services.UserService;
 import lt.verbus.view.*;
 
 import java.io.IOException;
@@ -27,7 +41,7 @@ public class Controller {
 
     private Scanner consoleInput;
 
-    User currentUser;
+    private User currentUser;
 
     public Controller() throws IOException, SQLException {
         bankRepository = new BankRepository(ConnectionPool.getConnection(SqlDialect.MY_SQL));
@@ -72,7 +86,7 @@ public class Controller {
             RegisterMenu.displayUsernameRequest();
             user.setUsername(consoleInput.nextLine());
             try {
-                userRepository.findByUsername(user.getUsername());
+                userService.findByUsername(user.getUsername());
             } catch (EntityNotFoundException ex) {
                 break;
             }
